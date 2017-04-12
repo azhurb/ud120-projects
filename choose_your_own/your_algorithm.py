@@ -24,6 +24,7 @@ plt.scatter(grade_slow, bumpy_slow, color = "r", label="slow")
 plt.legend()
 plt.xlabel("bumpiness")
 plt.ylabel("grade")
+plt.ion()
 plt.show()
 ################################################################################
 
@@ -32,13 +33,31 @@ plt.show()
 ### visualization code (prettyPicture) to show you the decision boundary
 
 
+from time import time
+from sklearn.neighbors.nearest_centroid import NearestCentroid
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+from sklearn import tree
+
+#cls = tree.DecisionTreeClassifier(min_samples_split=40)
+cls = SVC(kernel='rbf', C=102764)
+#cls = GaussianNB()
+#cls = NearestCentroid(metric='euclidean', shrink_threshold=None)
+
+t0 = time()
+cls.fit(features_train, labels_train)
+print "training time:", round(time()-t0, 3), "s"
+
+t1 = time()
+y_pred = cls.predict(features_test)
+print "predict time:", round(time()-t1, 3), "s"
+
+from sklearn.metrics import accuracy_score
+
+print "accuracy: ", accuracy_score(labels_test, y_pred)
 
 
-
-
-
-
-try:
-    prettyPicture(clf, features_test, labels_test)
-except NameError:
-    pass
+#try:
+prettyPicture(cls, features_test, labels_test)
+#except NameError:
+#    pass

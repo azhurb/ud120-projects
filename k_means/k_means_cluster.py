@@ -43,11 +43,30 @@ data_dict = pickle.load( open("../final_project/final_project_dataset.pkl", "r")
 ### there's an outlier--remove it! 
 data_dict.pop("TOTAL", 0)
 
+options=[]
+salary = []
+for name in data_dict:
+    if data_dict[name]["exercised_stock_options"] != "NaN":
+        options.append(data_dict[name]["exercised_stock_options"])
+    if data_dict[name]["salary"] != "NaN":
+        salary.append(data_dict[name]["salary"])
+
+options.sort()
+print "Min exercised_stock_options", options[0]
+print "Max exercised_stock_options", options[len(options) - 1]
+print "Rescaled exercised_stock_options of $1 million", (1000000.0 - options[0])/(options[len(options) - 1] - options[0])
+
+salary.sort()
+print "Min salary", salary[0]*1.0
+print "Max salary", salary[len(salary) - 1]*1.0
+
+print "Rescaled salary of $200,000", (200000.0 - salary[0])/(salary[len(salary) - 1] - salary[0])
 
 ### the input features we want to use 
 ### can be any key in the person-level dictionary (salary, director_fees, etc.) 
 feature_1 = "salary"
 feature_2 = "exercised_stock_options"
+feature_3 = "total_payments"
 poi  = "poi"
 features_list = [poi, feature_1, feature_2]
 data = featureFormat(data_dict, features_list )
@@ -59,12 +78,15 @@ poi, finance_features = targetFeatureSplit( data )
 ### for f1, f2, _ in finance_features:
 ### (as it's currently written, the line below assumes 2 features)
 for f1, f2 in finance_features:
-    plt.scatter( f1, f2 )
+    plt.scatter( f1, f2)
 plt.show()
 
 ### cluster here; create predictions of the cluster labels
 ### for the data and store them to a list called pred
 
+from sklearn.cluster import KMeans
+kmeans = KMeans(n_clusters=3).fit(finance_features)
+pred = kmeans.predict(finance_features)
 
 
 
