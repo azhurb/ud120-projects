@@ -83,7 +83,6 @@ combined_features = FeatureUnion([("pca", PCA(n_components=2)), ("univ_select", 
 clf = LogisticRegression(C=100000, class_weight='balanced')
 
 
-
 clf = Pipeline([("minmax", MinMaxScaler()), ("features", combined_features), ("clf", clf)])
 
 
