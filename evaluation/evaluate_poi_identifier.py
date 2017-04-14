@@ -29,3 +29,21 @@ labels, features = targetFeatureSplit(data)
 ### your code goes here 
 
 
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.model_selection import train_test_split
+import numpy as np
+
+features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.3, random_state=42)
+
+clf = DecisionTreeClassifier()
+clf.fit(features_train, labels_train);
+print "POI in test set", sum(labels_test)
+print "Accuracy for everyone not POI", clf.score(features_test, np.zeros(29))
+predict = clf.predict(features_test);
+#print predict
+#print labels_test
+print "precision_score", precision_score(labels_test, predict) 
+print "recall_score", recall_score(labels_test, predict) 
